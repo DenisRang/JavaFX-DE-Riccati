@@ -38,9 +38,9 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         lineChartMain.setCreateSymbols(false);
         lineCharTrunc.setCreateSymbols(false);
-        textFieldMainX0.setText("-5.0");
-        textFieldMainY0.setText("2.0");
-        textFieldMainX.setText("0.0");
+        textFieldMainX0.setText("0.0");
+        textFieldMainY0.setText("0.0");
+        textFieldMainX.setText("5.0");
         textFieldMainN.setText("100");
         textFieldTruncN0.setText("10");
         textFieldTruncNI.setText("100");
@@ -96,9 +96,18 @@ public class Controller implements Initializable {
     // OnClick for buttonTruncSolve, this function update truncation error chart with values from different fields
     @FXML
     private void updateTruncChartFromFields() {
+        double x0 = Double.parseDouble(textFieldMainX0.getText());
+        double y0 = Double.parseDouble(textFieldMainY0.getText());
+        double X = Double.parseDouble(textFieldMainX.getText());
+        int N = Integer.parseInt(textFieldMainN.getText());
+        deModel = new DEModel(x0, y0, X, N);
         int n0 = Integer.parseInt(textFieldTruncN0.getText());
         int ni = Integer.parseInt(textFieldTruncNI.getText());
-        List<XYChart.Series> plots = deModel.getTrunc(checkBoxTruncEuler.isSelected(), checkBoxTruncIe.isSelected(), checkBoxTruncRk.isSelected(), n0, ni);
+        List<XYChart.Series> plots = deModel.getTrunc(checkBoxTruncEuler.isSelected()
+                , checkBoxTruncIe.isSelected()
+                , checkBoxTruncRk.isSelected()
+                , n0
+                , ni);
         updateTruncChart(plots);
     }
 

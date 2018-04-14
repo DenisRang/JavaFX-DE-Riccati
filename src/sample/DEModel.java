@@ -27,18 +27,18 @@ public class DEModel {
     public List<XYChart.Series> getSolutions(boolean exact, boolean euler, boolean ie, boolean rk) {
         List<XYChart.Series> result = new ArrayList<>(4);
         double h = (X - x0) / N;
-        double x[] = new double[N + 1];
+        Double x[] = new Double[N + 1];
         x[0] = x0;
         for (int i = 1; i <= N; i++) {
             x[i] = x[i - 1] + h;
         }
-        double y[] = new double[N + 1];
+        Double y[] = new Double[N + 1];
         y[0] = y0;
         // Depend on chosen CheckBoxes result will contains solution series or null for relevant case
         if (exact) {
             result.add(exact(x, y, N));
         } else
-            result.add(null);//TODO: try to avoid null
+            result.add(null);
         if (euler) {
             result.add(euler(x, y, h, N));
         } else
@@ -54,28 +54,29 @@ public class DEModel {
         return result;
     }
 
-    private XYChart.Series<Number, Number> exact(double x[], double y[], int N) {
+    private XYChart.Series<Number, Number> exact(Double x[], Double y[], int N) {
         for (int i = 1; i <= N; i++) {
-            y[i] = exp(x[i]) - 1 / (x[i] + 1 / (exp(x[i]) * exp(x[i]) + 5) - 2);
+            y[i] = (exp(x[i])) - 1 / (x[i] + 1 / ((exp(x[i])) - 2) + 5);
         }
         return doublesToSeries(x, y, "Exact");
     }
 
-    private XYChart.Series<Number, Number> euler(double x[], double y[], double h, int N) {
+
+    private XYChart.Series<Number, Number> euler(Double x[], Double y[], double h, int N) {
         for (int i = 1; i <= N; i++) {
             y[i] = y[i - 1] + h * (f(x[i - 1], y[i - 1]));
         }
         return doublesToSeries(x, y, "Euler");
     }
 
-    private XYChart.Series<Number, Number> ie(double x[], double y[], double h, int N) {
+    private XYChart.Series<Number, Number> ie(Double x[], Double y[], double h, int N) {
         for (int i = 1; i <= N; i++) {
             y[i] = y[i - 1] + h * (f(x[i - 1] + h / 2, y[i - 1] + h * f(x[i - 1], y[i - 1]) / 2));
         }
         return doublesToSeries(x, y, "Improved Euler");
     }
 
-    private XYChart.Series rk(double x[], double y[], double h, int N) {
+    private XYChart.Series rk(Double x[], Double y[], double h, int N) {
         for (int i = 1; i <= N; i++) {
             double k1 = f(x[i - 1], y[i - 1]);
             double k2 = f(x[i - 1] + h / 2, y[i - 1] + h * k1 / 2);
@@ -86,14 +87,13 @@ public class DEModel {
         return doublesToSeries(x, y, "Runge-Kutta");
     }
 
-    private double f(double x, double y) {
-        return (1 - 2 * y) * exp(x) + y * y + exp(x) * exp(x);
+    private Double f(Double x, Double y) {
+        return ((1 - (2 * y)) * (exp(x))) + (y * y) + ((exp(x)) * (exp(x)));
     }
 
     // Create XYChart.Series from 2 arrays of double and set name to plot
-    private XYChart.Series<Number, Number> doublesToSeries(double x[], double y[], String name) {
-        XYChart.Series result;
-        result = new XYChart.Series();
+    private XYChart.Series<Number, Number> doublesToSeries(Double x[], Double y[], String name) {
+        XYChart.Series result = new XYChart.Series();
         result.setName(name);
         for (int i = 0; i < x.length; i++) {
             result.getData().add(new XYChart.Data(x[i], y[i]));
@@ -101,28 +101,23 @@ public class DEModel {
         return result;
     }
 
-    //when it start it call initializeGetTruncRez to get List of plots (at the start plots are empty
-    // or does not exist(if they will not be showed))
-    //for each required method for each N value it call getTrunc function
-    //required methods also set by CheckBoxes
-    //computation of truncation error made in private getTrunc funct
-    //return the list of all required plots of truncation error
 
+    // Return the list of all required truncation error of solution Series
     public List<XYChart.Series> getTrunc(boolean euler, boolean ie, boolean rk, int n0, int ni) {
         List<XYChart.Series> result = initializeGetTruncRez(euler, ie, rk);
         for (int n = n0; n <= ni; n++) {
             N = n;
+            List<XYChart.Series> seriesList = getSolutions(true, euler, ie, rk);
             for (int method = 1; method < 4; method++) {
-                List<XYChart.Series> seriesList = getSolutions(true, euler, ie, rk);
                 if (seriesList.get(method) != null) {
-                    result.get(method - 1).getData().add(new XYChart.Data(n, getTrunc(seriesList.get(0), seriesList.get(method))));
+                    result.get(method - 1).getData().add(new XYChart.Data(n, getMaxTrunc(seriesList.get(0), seriesList.get(method))));
                 }
             }
         }
         return result;
     }
-    //initialize list of Series and Series elements. Elements which are not chosen are null
 
+    // Initialize list of Series and Series elements. Elements which are not chosen are null
     private List<XYChart.Series> initializeGetTruncRez(boolean euler, boolean ie, boolean rk) {
         List<XYChart.Series> result = new ArrayList<XYChart.Series>(3);
         if (euler) {
@@ -142,21 +137,18 @@ public class DEModel {
             result.add(null);
         return result;
     }
-    //method to calculate truncation error based on some series (result of numerical method) and exact series
 
-    //return maximum value of difference between exact solution and numerical
-    private double getTrunc(XYChart.Series exact, XYChart.Series series) {
-        XYChart.Series result;
-        result = new XYChart.Series();
-        double max_trunc = 0;
+    // Return maximum value of difference between exact solution and numerical
+    private double getMaxTrunc(XYChart.Series exact, XYChart.Series series) {
+        double maxTrunc = 0;
         for (int i = 0; i <= N; i++) {
-            XYChart.Data<Number, Number> current_exact = (XYChart.Data) exact.getData().get(i);
-            XYChart.Data<Number, Number> current_series = (XYChart.Data) series.getData().get(i);
-            double trunc = abs((double) current_exact.getYValue() - (double) current_series.getYValue());
-            if (trunc > max_trunc)
-                max_trunc = trunc;
+            XYChart.Data<Number, Number> currentExact = (XYChart.Data) exact.getData().get(i);
+            XYChart.Data<Number, Number> currentSeries = (XYChart.Data) series.getData().get(i);
+            double trunc = abs((double) currentExact.getYValue() - (double) currentSeries.getYValue());
+            if (trunc > maxTrunc)
+                maxTrunc = trunc;
         }
-        return max_trunc;
+        return maxTrunc;
     }
 }
 
