@@ -55,10 +55,15 @@ public class DEModel {
     }
 
     private XYChart.Series<Number, Number> exact(Double x[], Double y[], int N) {
+        Double c = findC();
         for (int i = 1; i <= N; i++) {
-            y[i] = (exp(x[i])) - 1 / (x[i] + 1 / ((exp(x[i])) - 2) + 5);
+            y[i] = exp(x[i]) - 1 / (x[i] + c);
         }
         return doublesToSeries(x, y, "Exact");
+    }
+
+    private Double findC() {
+        return 1 / (exp(x0) - y0) - x0;
     }
 
 
