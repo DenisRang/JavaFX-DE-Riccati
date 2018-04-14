@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -10,7 +11,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
@@ -22,13 +22,11 @@
                             <items>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <Label layoutX="28.0" prefHeight="25.0" prefWidth="102.0" text="Param" />
+                                        <Label layoutX="6.0" prefHeight="25.0" prefWidth="102.0" text="Methods" />
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane fx:id="num_par" minHeight="0.0" minWidth="0.0" prefHeight="179.0" prefWidth="100.0">
                                     <children>
-                                        <Label layoutX="6.0" layoutY="9.0" text="N" />
-                                        <TextField fx:id="textFieldMainN" layoutX="26.0" layoutY="5.0" prefHeight="25.0" prefWidth="60.0" />
                                         <CheckBox fx:id="checkBoxMainExact" layoutX="4.0" layoutY="41.0" mnemonicParsing="false" text="Exact" />
                                         <CheckBox fx:id="checkBoxMainEuler" layoutX="3.0" layoutY="69.0" mnemonicParsing="false" text="Euler" />
                                         <CheckBox fx:id="checkBoxMainIe" layoutX="3.0" layoutY="95.0" mnemonicParsing="false" text="IE" />
@@ -39,43 +37,50 @@
                         </SplitPane>
                     </children>
                 </VBox>
-                <LineChart fx:id="lineChartMain" layoutY="21.0" prefHeight="765.0" prefWidth="892.0" title="Solution" AnchorPane.bottomAnchor="-208.0" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="-788.0" AnchorPane.topAnchor="21.0">
+                <LineChart fx:id="lineChartMain" layoutY="21.0" legendSide="RIGHT" prefHeight="765.0" prefWidth="892.0" title="Solution" AnchorPane.bottomAnchor="-208.0" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="-788.0" AnchorPane.topAnchor="21.0">
                     <xAxis>
                         <NumberAxis label="x" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                         <NumberAxis label="y" side="LEFT" />
                     </yAxis>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
                 </LineChart>
-                <VBox fx:id="ivp" layoutY="130.0" prefHeight="135.0" prefWidth="102.0">
+                <VBox fx:id="ivp" layoutY="130.0" prefHeight="182.0" prefWidth="102.0">
                     <children>
-                        <SplitPane dividerPositions="0.25961538461538464" orientation="VERTICAL" prefHeight="138.0" prefWidth="102.0">
+                        <SplitPane dividerPositions="0.25961538461538464" orientation="VERTICAL" prefHeight="189.0" prefWidth="102.0">
                             <items>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <Label layoutX="6.0" prefHeight="25.0" prefWidth="102.0" text="Initial conditions" textAlignment="CENTER" />
+                                        <Label layoutX="6.0" prefHeight="25.0" prefWidth="102.0" text="Parameters" textAlignment="CENTER" />
                                     </children>
                                 </AnchorPane>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="120.0" prefWidth="100.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="100.0">
                                     <children>
-                                        <Label layoutX="6.0" layoutY="9.0" text="x0" />
+                                        <Label layoutX="7.0" layoutY="9.0" text="x0" />
                                         <Label layoutX="7.0" layoutY="39.0" text="y0" />
-                                        <Label layoutX="8.0" layoutY="69.0" prefHeight="25.0" prefWidth="28.0" text="X" />
+                                        <Label layoutX="7.0" layoutY="69.0" text="X" />
+                                        <Label layoutX="7.0" layoutY="99.0" text="N" />
                                         <TextField fx:id="textFieldMainX0" layoutX="26.0" layoutY="5.0" prefHeight="25.0" prefWidth="60.0" />
                                         <TextField fx:id="textFieldMainY0" layoutX="26.0" layoutY="36.0" prefHeight="25.0" prefWidth="60.0" />
                                         <TextField fx:id="textFieldMainX" layoutX="26.0" layoutY="67.0" prefHeight="25.0" prefWidth="60.0" />
+                                        <TextField fx:id="textFieldMainN" layoutX="26.0" layoutY="98.0" prefHeight="25.0" prefWidth="60.0" />
+
                                     </children>
                                 </AnchorPane>
                             </items>
                         </SplitPane>
                     </children>
                 </VBox>
+              <Label alignment="TOP_RIGHT" contentDisplay="TOP" layoutY="85.0" prefHeight="32.0" prefWidth="147.0" text="y' = (1-2y)e^x+y^2+e^2x" />
             </children>
         </AnchorPane>
-        <Button fx:id="buttonMainSolve" layoutX="1.0" layoutY="593.0" mnemonicParsing="false" onMouseClicked="#updateMainChartFromFields" prefHeight="32.0" prefWidth="102.0" text="Solve" />
+        <Button fx:id="buttonMainSolve" layoutX="3.0" layoutY="577.0" mnemonicParsing="false" onMouseClicked="#updateMainChartFromFields" prefHeight="32.0" prefWidth="102.0" text="Solve" />
         <AnchorPane fx:id="paneTrunc" layoutX="3.0" prefHeight="800.0" prefWidth="1000.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <LineChart fx:id="lineCharTrunc" layoutX="96.0" layoutY="21.0" prefHeight="765.0" prefWidth="892.0" title="Truncation error" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="21.0">
+                <LineChart fx:id="lineCharTrunc" layoutX="96.0" layoutY="21.0" legendSide="RIGHT" prefHeight="765.0" prefWidth="892.0" title="Truncation error" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="21.0">
                     <xAxis>
                         <NumberAxis label="x" side="BOTTOM" />
                     </xAxis>
@@ -83,13 +88,13 @@
                         <NumberAxis label="y" side="LEFT" />
                     </yAxis>
                 </LineChart>
-                <VBox fx:id="vBoxTrunc" prefHeight="199.0" prefWidth="102.0">
+                <VBox fx:id="vBoxTrunc" layoutX="3.0" layoutY="130.0" prefHeight="199.0" prefWidth="102.0">
                     <children>
                         <SplitPane dividerPositions="0.16489361702127658" orientation="VERTICAL" prefHeight="244.0" prefWidth="102.0">
                             <items>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <Label layoutX="28.0" prefHeight="25.0" prefWidth="102.0" text="Param" />
+                                        <Label layoutX="28.0" prefHeight="25.0" prefWidth="102.0" text="Parameters" />
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane fx:id="trunc_par" minHeight="0.0" minWidth="0.0" prefHeight="179.0" prefWidth="100.0">
@@ -109,17 +114,12 @@
                 </VBox>
             </children>
         </AnchorPane>
-        <ButtonBar fx:id="menu" layoutX="739.0" layoutY="11.0" prefHeight="44.0" prefWidth="247.0">
+        <ButtonBar fx:id="menu" layoutY="11.0" prefHeight="44.0" prefWidth="247.0">
             <buttons>
                 <Button fx:id="buttonMainView" minWidth="63.0" mnemonicParsing="false" onAction="#mainView" prefHeight="25.0" text="Main" />
                 <Button fx:id="buttonTruncView" minWidth="65.0" mnemonicParsing="false" onAction="#truncView" prefHeight="25.0" text="Truncation error" />
             </buttons>
         </ButtonBar>
-        <Label layoutX="184.0" layoutY="25.0" text="y' = sin(x) + y ">
-            <font>
-                <Font size="26.0" />
-            </font>
-        </Label>
         <Button fx:id="buttonTruncSolve" layoutX="1.0" layoutY="593.0" mnemonicParsing="false" onAction="#updateTruncChartFromFields" onMouseClicked="#updateMainChartFromFields" prefHeight="44.0" prefWidth="102.0" text="Get truncation&#10;error" textAlignment="CENTER" visible="false" />
     </children>
 </AnchorPane>
